@@ -1,7 +1,7 @@
 class Account < ActiveRecord::Base
   has_many :balances
   has_many :coins, through: :balances
-  validates :username, unique: true
+  validates_uniqueness_of :username, unique: true
 
   # Returns an instance of Account if authentication is successful
   # returns nil otherwise.
