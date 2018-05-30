@@ -1,13 +1,10 @@
 class CommandLineInterface
-  attr_writer :exit_loop
-  @@exit_loop = false
-
   @@options = Hash.new(:error)
     @@options["1"] = :login
     @@options["2"] = :register
     @@options["3"] = :guest_login
     @@options["4"] = :help
-    @@options["5"] = :exit
+    @@options["5"] = :exit_cli
 
     def welcome_message
       puts "\nWelcome to the Coinbase CLI."
@@ -28,7 +25,6 @@ class CommandLineInterface
         print_options
         option = gets.chomp
         self.send(@@options[option])
-        break if @@exit_loop
       end
     end
 
@@ -58,9 +54,9 @@ class CommandLineInterface
       puts "\nInvalid entry...\nEnter '4' for help"
     end
 
-    def exit
+    def exit_cli
       puts "\nBye, see you soon!"
       puts ""
-      @@exit_loop = true
+      exit
     end
 end
