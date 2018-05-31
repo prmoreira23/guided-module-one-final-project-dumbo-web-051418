@@ -9,23 +9,6 @@ anthony = Account.create(username: "anthony" ,password: "tonyspizza", first_name
 matt = Account.create(username: "matt", password: "youguysareawesome", first_name: "Matt", last_name: "McAlister")
 prince = Account.create(username: "prince", password: "mattisgreat", first_name: "Prince", last_name: "Wilson")
 
-
-#Balances
-
-prince_balance = Balance.create(account_id: 5, coin_id: 2, amount: 1663.0)
-prince_balance2 = Balance.create(account_id: 5, coin_id: 3, amount: 1756.0)
-matt_balance = Balance.create(account_id: 4, coin_id: 5, amount: 933.0)
-matt_balance2 = Balance.create(account_id: 4, coin_id: 2, amount: 1991.0)
-anthony_balance = Balance.create(account_id: 3, coin_id: 3, amount: 423.0)
-anthony_balance2 = Balance.create(account_id: 3, coin_id: 2, amount: 1938.0)
-sammy_balance = Balance.create(account_id: 1, coin_id: 3, amount: 405.0)
-sammy_balance2 = Balance.create(account_id: 1, coin_id: 1, amount: 1275.0)
-sammy_balance3 = Balance.create(account_id: 1, coin_id: 4, amount: 1550.0)
-sammy_balance4 = Balance.create(account_id: 1, coin_id: 5, amount: 814.0)
-pablo_balance = Balance.create(account_id: 2, coin_id: 1, amount: 1991.0)
-pablo_balance2 = Balance.create(account_id: 2, coin_id: 2, amount: 453.0)
-pablo_balance3 = Balance.create(account_id: 2, coin_id: 5, amount: 2000.0)
-
 #Coins
 url = 'https://api.coinmarketcap.com/v2/listings/'
 response = RestClient.get(url)
@@ -33,6 +16,21 @@ data = JSON.parse(response)
 
 coin_hash = data["data"][0..4]
 coin_hash.map do |coin|
-  Coin.create(coin) do |m|
-  end
+  Coin.create(coin)
 end
+
+#Balances
+
+prince_balance = Balance.create(account_id: prince.id, coin_id: 2, amount: 1663.0)
+prince_balance2 = Balance.create(account_id: prince.id, coin_id: 3, amount: 1756.0)
+matt_balance = Balance.create(account_id: matt.id, coin_id: 5, amount: 933.0)
+matt_balance2 = Balance.create(account_id: matt.id, coin_id: 2, amount: 1991.0)
+anthony_balance = Balance.create(account_id: anthony.id, coin_id: 3, amount: 423.0)
+anthony_balance2 = Balance.create(account_id: anthony.id, coin_id: 2, amount: 1938.0)
+sammy_balance = Balance.create(account_id: sammy.id, coin_id: 3, amount: 405.0)
+sammy_balance2 = Balance.create(account_id: sammy.id, coin_id: 1, amount: 1275.0)
+sammy_balance3 = Balance.create(account_id: sammy.id, coin_id: 4, amount: 1550.0)
+sammy_balance4 = Balance.create(account_id: sammy.id, coin_id: 5, amount: 814.0)
+pablo_balance = Balance.create(account_id: pablo.id, coin_id: 1, amount: 1991.0)
+pablo_balance2 = Balance.create(account_id: pablo.id, coin_id: 2, amount: 453.0)
+pablo_balance3 = Balance.create(account_id: pablo.id, coin_id: 5, amount: 2000.0)
