@@ -63,25 +63,22 @@ class CommandLineInterface
 
   def about_us
     puts "\nWe are the major crypto currency exchange in the United States. \nWe work with all major coins."
-    print "\nPress [ENTER]."
+    print "\nPress [ENTER]"
     gets.chomp
   end
 
   def coins_quotes
-    CryptoApi.coins[1..5].each {|coin|
-      begin
-        puts "Name: #{coin.name}. U$ #{CryptoApi.get_quote_dollar(coin)}"
-        sleep 1 # API blocks us if we do several request so fast
-      rescue RestClient::TooManyRequests => e
-        puts 'Too many requests to free API.'
-        break
-      end
+    quotes = CryptoApi.get_quotes_to_dollar
+    Coin.all.each {|coin|
+        puts "Name: #{coin.name}. USD #{quotes[coin.id - 1]}"
     }
+    print "\nPress [ENTER]"
+    gets.chomp
   end
 
   def logout
     puts "\nThank you for using KoinBase, #{@user.first_name}!" if @user
-    print "\nPress [ENTER]."
+    print "\nPress [ENTER]"
     gets.chomp
     @user = nil
   end
@@ -94,7 +91,7 @@ class CommandLineInterface
       puts "No balances to be displayed."
     end
 
-    print "\nPress [ENTER]."
+    print "\nPress [ENTER]"
     gets.chomp
   end
 
@@ -116,13 +113,14 @@ class CommandLineInterface
 
   def finish
     puts "\nThank you for using KoinBase!" unless @user
-    print "\nPress [ENTER]."
+    print "\nPress [ENTER]"
     gets.chomp
     exit
   end
 
   def error
     puts "option not available..."
+    print "\nPress [ENTER]"
     gets.chomp
   end
 end

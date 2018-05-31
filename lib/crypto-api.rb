@@ -21,9 +21,21 @@ class CryptoApi
     self.coins = self.get_all_coins
   end
 
-  def self.get_quote_dollar(coin_from)
+  def self.get_quote_dollar(coin)
     url = "#{URI_BASE}ticker/#{coin_from.id}/?convert=#{coin_from.symbol}"
     quote = get_JSON(url)['data']['quotes']["USD"]["price"]
+  end
+
+  def self.get_quotes_to_dollar
+    url = "https://api.coinmarketcap.com/v2/ticker/?start=1&limit=5&sort=id"
+    response = RestClient.get(url)
+    data = JSON.parse(response)
+    quotes = []
+    coin_hash = data["data"]
+    coin_hash.each do |coin_id, coin|
+      quotes << coin['quotes']["USD"]["price"]
+    end
+    quotes
   end
 
   private
