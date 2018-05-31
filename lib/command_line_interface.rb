@@ -1,4 +1,5 @@
 require 'highline/import'
+require 'digest'
 
 class CommandLineInterface
   @@options = {no_user: Hash.new(:error), user: Hash.new(:error)}
@@ -50,6 +51,7 @@ class CommandLineInterface
     print "username: "
     username = gets.chomp
     password = ask("password:  ") { |q| q.echo = "*" }
+    password = Digest::MD5.hexdigest(password)
     account = Account.find_by(username: username)
     @user = account.authenticate?(password) if account
 
