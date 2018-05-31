@@ -5,8 +5,9 @@ class Balance < ActiveRecord::Base
   # Returns current balance if transaction is successful,
   # raises an exception otherwise
   def withdraw(amount)
-    if has_enough_funds?
+    if has_enough_funds?(amount)
       self.amount -= amount
+      self.save
     else
       raise NotEnoughFunds.new('There is not enough funds to process this transaction.')
     end
@@ -15,6 +16,7 @@ class Balance < ActiveRecord::Base
   # Adds a deposit amount to the balance amount
   def deposit(amount)
     self.amount += amount
+    self.save
   end
 
   # def transfer(balance, account, amount)

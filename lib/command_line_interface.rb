@@ -3,16 +3,18 @@ require 'highline/import'
 
 class CommandLineInterface
   @@options = {user: Hash.new(:error), no_user: Hash.new(:error)}
+    @@options[:no_user]["0"] = :exit_cli
     @@options[:no_user]["1"] = :login
     @@options[:no_user]["2"] = :register
     @@options[:no_user]["3"] = :prices
     @@options[:no_user]["4"] = :help
-    @@options[:no_user]["5"] = :exit_cli
+
+    @@options[:user]["0"] = :logout
     @@options[:user]["1"] = :balances
-    @@options[:user]["2"] = :prices
-    @@options[:user]["3"] = :logout
-    @@options[:user]["4"] = :help
-    @@options[:user]["5"] = :exit_cli
+    @@options[:user]["2"] = :withdraw
+    @@options[:user]["3"] = :prices
+    @@options[:user]["5"] = :help
+
 
     def initialize
       @user = nil
@@ -24,7 +26,7 @@ class CommandLineInterface
     end
 
     def print_options
-      puts @user ? "\n1 - See balances\n2 - Prices\n3 - Logout" : "1 - Login\n2 - Register\n3 - Prices\n4 - Help\n5 - Exit"
+      puts @user ? "\n1 - See balances\n2 - Withdraw\n3 - Prices\n0 - Logout" : "1 - Login\n2 - Register\n3 - Prices\n4 - Help\n0 - Exit"
     end
 
     def run
@@ -66,8 +68,21 @@ class CommandLineInterface
       end
     end
 
-    def guest_login
-      puts "\ncoming soon.."
+    def withdraw
+      balances
+      puts "Which balance would you like to withdraw from?"
+      input = gets.chomp
+      puts "How much would you like to withdraw?"
+      amount = gets.chomp
+      balance = @user.balances[input.to_i]
+
+      begin
+        balance.withdraw(amount.to_f)
+        puts "You are withdrawing #{amount} from your #{balance.coin.name} wallet."
+      rescue
+        puts "You do not have enough in your balance to withdraw that amount."
+      end
+
     end
 
     def balances
