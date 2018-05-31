@@ -1,13 +1,14 @@
+require 'digest'
 Coin.destroy_all
 Account.destroy_all
 Balance.destroy_all
 
 #Accounts
-sammy = Account.create(username: "sammy", password: "thebull", first_name: "Sammy", last_name: "Akharaz")
-pablo = Account.create(username: "pabloo", password: "brazilrocks", first_name: "Pablo", last_name: "Moreira")
-anthony = Account.create(username: "anthony" ,password: "tonyspizza", first_name: "Anthony", last_name: "Lam")
-matt = Account.create(username: "matt", password: "youguysareawesome", first_name: "Matt", last_name: "McAlister")
-prince = Account.create(username: "prince", password: "mattisgreat", first_name: "Prince", last_name: "Wilson")
+sammy = Account.create(username: "sammy", password: Digest::MD5.hexdigest("thebull"), first_name: "Sammy", last_name: "Akharaz")
+pablo = Account.create(username: "pabloo", password: Digest::MD5.hexdigest("brazilrocks"), first_name: "Pablo", last_name: "Moreira")
+anthony = Account.create(username: "anthony" ,password: Digest::MD5.hexdigest("tonyspizza"), first_name: "Anthony", last_name: "Lam")
+matt = Account.create(username: "matt", password: Digest::MD5.hexdigest("youguysareawesome"), first_name: "Matt", last_name: "McAlister")
+prince = Account.create(username: "prince", password: Digest::MD5.hexdigest("mattisgreat"), first_name: "Prince", last_name: "Wilson")
 
 #Coins
 url = 'https://api.coinmarketcap.com/v2/listings/'

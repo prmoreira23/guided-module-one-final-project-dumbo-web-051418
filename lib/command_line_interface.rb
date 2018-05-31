@@ -1,8 +1,10 @@
+require 'digest'
+
 class CommandLineInterface
   @@options = {user: Hash.new(:error), no_user: Hash.new(:error)}
     @@options[:no_user]["1"] = :login
     @@options[:no_user]["2"] = :register
-    @@options[:no_user]["3"] = :guest_login
+    @@options[:no_user]["3"] = :prices
     @@options[:no_user]["4"] = :help
     @@options[:no_user]["5"] = :exit_cli
     @@options[:user]["1"] = :balances
@@ -21,7 +23,7 @@ class CommandLineInterface
     end
 
     def print_options
-      puts @user ? "\n1 - See balances\n2 - Prices\n3 - Logout" : "1 - Login\n2 - Register\n3 - Login as guest\n4 - Help\n5 - Exit"
+      puts @user ? "\n1 - See balances\n2 - Prices\n3 - Logout" : "1 - Login\n2 - Register\n3 - Prices\n4 - Help\n5 - Exit"
     end
 
     def run
@@ -39,6 +41,7 @@ class CommandLineInterface
       username = gets.chomp
       puts "\nPlease enter your password"
       password = gets.chomp
+      password = Digest::MD5.hexdigest(password)
       user = Account.find_by(username: username)
       @user = user.authenticate(password) if user
       puts @user ? "\nSuccessful login as #{username}" : "\nInvalid username or password."
@@ -53,6 +56,7 @@ class CommandLineInterface
       else
         puts "\nPlease enter your desired password"
         password = gets.chomp
+        password = Digest::MD5.hexdigest(password)
         puts "\nPlease enter your first name"
         first_name = gets.chomp
         puts "\nPlease enter your last name"
