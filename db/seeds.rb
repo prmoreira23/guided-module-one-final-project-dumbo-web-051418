@@ -1,4 +1,5 @@
 require 'digest'
+
 Coin.destroy_all
 Account.destroy_all
 Balance.destroy_all
