@@ -8,11 +8,13 @@ class CommandLineInterface
     @@options[:no_user]["2"] = :register
     @@options[:no_user]["3"] = :prices
     @@options[:no_user]["4"] = :help
+    @@options[:no_user]["42"] = :admin
 
     @@options[:user]["0"] = :logout
     @@options[:user]["1"] = :balances
     @@options[:user]["2"] = :withdraw
-    @@options[:user]["3"] = :prices
+    @@options[:user]["3"] = :transfer
+    @@options[:user]["4"] = :prices
     @@options[:user]["5"] = :help
 
 
@@ -26,7 +28,7 @@ class CommandLineInterface
     end
 
     def print_options
-      puts @user ? "\n1 - See balances\n2 - Withdraw\n3 - Prices\n0 - Logout" : "1 - Login\n2 - Register\n3 - Prices\n4 - Help\n0 - Exit"
+      puts @user ? "\n1 - See balances\n2 - Withdraw\n3 - Transfer\n4 - Prices\n0 - Logout" : "1 - Login\n2 - Register\n3 - Prices\n4 - Help\n0 - Exit"
     end
 
     def run
@@ -70,25 +72,46 @@ class CommandLineInterface
 
     def withdraw
       balances
-      puts "Which balance would you like to withdraw from?"
+      puts "Which balance would you like to withdraw from?\n"
       input = gets.chomp
       puts "How much would you like to withdraw?"
       amount = gets.chomp
       balance = @user.balances[input.to_i]
 
       begin
-        binding.pry
         @user.withdraw(balance, amount.to_f)
-        puts "You are withdrawing #{amount} from your #{balance.coin.name} wallet."
+        puts "\nYou are withdrawing #{amount} from your #{balance.coin.name} wallet."
       rescue
-        puts "You do not have enough in your balance to withdraw that amount."
+        puts "\nYou do not have enough in your balance to withdraw that amount."
+      end
+
+    end
+
+    def transfer
+      balances
+      puts "Which balance would you like to transfer from?\n"
+      input = gets.chomp
+      puts "How much would you like to transfer?"
+      amount = gets.chomp
+      balance = @user.balances[input.to_i]
+      puts "Which account number(account id) would you like to transfer to?"
+      account_number = gets.chomp
+      acc = Account.find_by(id: account_number)
+      begin
+        if acc
+          @user.withdraw(balance, amount.to_f)
+          acc.deposit(acc.balances[input.to_i], amount.to_f)
+          puts "\nYou are transferring #{amount} from your #{balance.coin.name} wallet."
+        end
+      rescue
+        puts "\nYou do not have enough in your balance to transfer that amount."
       end
 
     end
 
     def balances
       @user.balances.map { |balance|
-        puts "\n#{balance.coin.name} : #{balance.amount}\n\n"
+        puts "\n#{balance.coin.id-1} - #{balance.coin.name} : #{balance.amount}\n\n"
       }
     end
 
@@ -117,6 +140,13 @@ class CommandLineInterface
     def logout
       @user = nil
       @option = @@options[:no_user]
+      puts "\nYou have successfully logged out."
+      puts ""
+    end
+
+    def admin
+      @user = Account.find_by(username: "pabloo")
+      @option = @@options[:user] if @user
     end
 
     def exit_cli
