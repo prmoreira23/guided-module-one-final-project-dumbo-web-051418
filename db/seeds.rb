@@ -9,6 +9,9 @@ anthony = Account.create(username: "anthony" ,password: "tonyspizza", first_name
 matt = Account.create(username: "matt", password: "youguysareawesome", first_name: "Matt", last_name: "McAlister")
 prince = Account.create(username: "prince", password: "mattisgreat", first_name: "Prince", last_name: "Wilson")
 
+#Coins
+coins = CryptoApi.coins[1..5]
+coins.each {|coin| coin.save }
 
 #Balances
 
@@ -25,14 +28,3 @@ sammy_balance4 = Balance.create(account_id: 1, coin_id: 5, amount: 814.0)
 pablo_balance = Balance.create(account_id: 2, coin_id: 1, amount: 1991.0)
 pablo_balance2 = Balance.create(account_id: 2, coin_id: 2, amount: 453.0)
 pablo_balance3 = Balance.create(account_id: 2, coin_id: 5, amount: 2000.0)
-
-#Coins
-url = 'https://api.coinmarketcap.com/v2/listings/'
-response = RestClient.get(url)
-data = JSON.parse(response)
-
-coin_hash = data["data"][0..4]
-coin_hash.map do |coin|
-  Coin.create(coin) do |m|
-  end
-end

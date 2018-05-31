@@ -15,6 +15,18 @@ class Account < ActiveRecord::Base
     balance.withdraw(ammount)
   end
 
+  def find_balance_by_coin(coin)
+    if coin
+      balances.find { |balance|
+        balance.coin == coin
+      }.nil? and begin
+        balance = Balance.create(account: self, coin: coin, amount: 0)
+        self.balances << balance
+        balance
+      end
+    end
+  end
+
 
   def deposit(balance, amount)
     balance.deposit(amount)
