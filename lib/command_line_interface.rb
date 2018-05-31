@@ -77,7 +77,8 @@ class CommandLineInterface
       balance = @user.balances[input.to_i]
 
       begin
-        balance.withdraw(amount.to_f)
+        binding.pry
+        @user.withdraw(balance, amount.to_f)
         puts "You are withdrawing #{amount} from your #{balance.coin.name} wallet."
       rescue
         puts "You do not have enough in your balance to withdraw that amount."
