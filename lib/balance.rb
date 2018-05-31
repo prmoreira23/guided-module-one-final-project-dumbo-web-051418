@@ -15,6 +15,7 @@ class Balance < ActiveRecord::Base
   # Adds a deposit amount to the balance amount
   def deposit(amount)
     self.amount += amount
+    self.save
   end
 
   class NotEnoughFunds < StandardError

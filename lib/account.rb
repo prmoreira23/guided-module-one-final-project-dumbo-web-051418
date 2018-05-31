@@ -18,11 +18,11 @@ class Account < ActiveRecord::Base
   def find_balance_by_coin(coin)
     if coin
       balances.find { |balance|
-        balance.coin == coin
+        return balance if balance.coin == coin
       }.nil? and begin
         balance = Balance.create(account: self, coin: coin, amount: 0)
         self.balances << balance
-        balance
+        return balance
       end
     end
   end
