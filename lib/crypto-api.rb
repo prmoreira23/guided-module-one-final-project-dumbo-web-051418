@@ -57,10 +57,10 @@ class CryptoApi
     quote = get_JSON(url)['data']['quotes'][coin_to.symbol]["price"]
   end
 
-  begin
-    @@coins = self.get_all_coins
-  rescue RestClient::TooManyRequests => e
-    puts 'Too many requests to free API.'
-  end
+  # begin
+  #   @@coins = self.get_all_coins
+  # rescue RestClient::TooManyRequests => e
+  #   puts 'Too many requests to free API.'
+  # end
 
 end

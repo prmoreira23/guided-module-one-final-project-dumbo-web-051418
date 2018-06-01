@@ -5,7 +5,7 @@ class Account < ActiveRecord::Base
 
   after_create do
     Coin.all.each { |coin|
-      self.balances << Balance.create(coin: coin, account: self, amount: 0)
+      self.balances << Balance.create(coin: coin, account: self, amount: 20)
     }
   end
 
