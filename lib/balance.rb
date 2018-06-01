@@ -15,8 +15,8 @@ class Balance < ActiveRecord::Base
 
   # Adds a deposit amount to the balance amount
   def deposit(amount)
-    self.amount += amount
-    self.save
+    self.amount += amount if amount > 0
+    self.save if amount > 0
   end
 
   # def transfer(balance, account, amount)
