@@ -117,13 +117,17 @@ class CommandLineInterface
   def deposit_coin
     puts "DEPOSIT"
     Coin.all.each { |coin|
-      puts coin.name
+      puts "#{coin.id} - #{coin.name}"
     }
     puts "Select coin: "
     id = gets.chomp
 
+    return nil if id.to_i == 0
+
     puts "Amount: "
     amount = gets.chomp
+
+    return nil if amount.to_f == 0
 
     coin = Coin.find_by(id: id)
     balance = coin ? @user.find_balance_by_coin(coin) : nil
@@ -137,12 +141,23 @@ class CommandLineInterface
     end
 
   def withdraw
-      balances
-      puts "Which balance would you like to withdraw from?\n"
-      input = gets.chomp
-      puts "How much would you like to withdraw?"
-      amount = gets.chomp
-      balance = @user.balances[input.to_i]
+    puts "DEPOSIT"
+    Coin.all.each { |coin|
+      puts "#{coin.id} - #{coin.name}"
+    }
+    puts "Select coin: "
+    id = gets.chomp
+
+    return nil if id.to_i == 0
+
+    puts "Amount: "
+    amount = gets.chomp
+
+    return nil if amount.to_f == 0
+
+    coin = Coin.find_by(id: id)
+    balance = coin ? @user.find_balance_by_coin(coin) : nil
+    return nil unless balance
 
       begin
         @user.withdraw(balance, amount.to_f)
