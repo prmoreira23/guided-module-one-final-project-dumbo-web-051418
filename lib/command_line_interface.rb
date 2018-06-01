@@ -88,7 +88,12 @@ class CommandLineInterface
     password = ask("password:  ") { |q| q.echo = "*" }
     account = Account.find_by(username: username)
     @user = account.authenticate?(password) if account
-    puts @user ? "\nSuccessfully logged in as #{@user.first_name}." : "\nUsername/Password Invalid"
+    if @user
+      puts "\nSuccessfully logged in as #{@user.first_name}."
+      `afplay cash.wav`
+    else
+      puts"\nUsername/Password Invalid"
+    end
     print "\nPress [ENTER]"
     gets.chomp
   end
@@ -131,7 +136,14 @@ class CommandLineInterface
 
     coin = Coin.find_by(id: id)
     balance = coin ? @user.find_balance_by_coin(coin) : nil
-    @user.deposit(balance, amount.to_f) if balance
+
+    begin
+      @user.deposit(balance, amount.to_f) if balance
+      puts "\nYou are depositing #{amount} to your #{balance.coin.name} wallet."
+    rescue StandardError
+      puts "\nYou cannot deposit a negative amount."
+    end
+
   end
 
   def balances
@@ -141,7 +153,7 @@ class CommandLineInterface
     end
 
   def withdraw
-    puts "DEPOSIT"
+    puts "WITHDRAW"
     Coin.all.each { |coin|
       puts "#{coin.id} - #{coin.name}"
     }

@@ -16,6 +16,7 @@ class Balance < ActiveRecord::Base
 
  # Adds a deposit amount to the balance amount
  def deposit(amount)
+   raise StandardError("Not alllowed to deposit negative amounts. Are you nuts?") if amount < 0
    self.amount += amount
    self.save
  end
