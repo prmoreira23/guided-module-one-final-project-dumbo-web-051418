@@ -24,17 +24,29 @@ class CommandLineInterface
     end
 
     def welcome_message
-      puts "\nWelcome to the Coinbase CLI."
+      puts "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=++=+=+=+=+=++=+=+=+=+=+=+=+"
+      puts "|\t\t\tWelcome to KoinBase!\t\t\t|" unless @user
+      puts "|\tWelcome Back to KoinBase, #{@user.first_name}!" if @user
+      puts "================================================================="
+      puts "|\t The place where experts manage their cryptocurrency \t|"
+      puts "|                                                               |"
+      puts "|\t\t Created by Pablo, Sammy, & Anthony \t\t|"
+      puts "+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=++=+=+=+=+=++=+=+=+=+=+=+=+"
+
     end
 
+
     def print_options
-      puts @user ? "\n1 - See balances\n2 - Withdraw\n3 - Transfer\n4 - Prices\n0 - Logout" : "1 - Login\n2 - Register\n3 - Prices\n4 - Help\n0 - Exit"
+      puts @user ? "|\t\t|\t1 - See balances\n\t2 - Withdraw\n\t3 - Transfer\n\t4 - Prices\n\t0 - Logout\n |" :
+      "\t\t|\t1 - Login\t\t|\n\t\t|\t2 - Register\t\t|\n\t\t|\t3 - Prices\t\t|\n\t\t|\t4 - Help\t\t|\n\t\t|\t0 - Exit\t\t|\n\t\t|_______________________________|"
     end
 
     def run
       welcome_message
       loop do
-        puts "\nPlease enter an option:"
+        puts "\t\t*********************************\t"
+        puts "\t\t|    Please enter an option:\t|\t"
+        puts "\t\t*********************************\t\t"
         print_options
         option = gets.chomp
         self.send(@option[option])
@@ -48,7 +60,7 @@ class CommandLineInterface
       password = Digest::MD5.hexdigest(password)
       user = Account.find_by(username: username)
       @user = user.authenticate(password) if user
-      puts @user ? "\nSuccessful login as #{username}" : "\nInvalid username or password."
+      puts @user ? "\nSuccessful login as #{username}!" : "\nInvalid username or password."
       @option = @@options[:user] if @user
     end
 
