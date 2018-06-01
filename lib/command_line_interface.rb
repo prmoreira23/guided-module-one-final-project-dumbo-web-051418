@@ -88,8 +88,9 @@ class CommandLineInterface
     password = ask("password:  ") { |q| q.echo = "*" }
     account = Account.find_by(username: username)
     @user = account.authenticate?(password) if account
-
-    system("clear")
+    puts @user ? "\nSuccessfully logged in as #{@user.first_name}." : "\nUsername/Password Invalid"
+    print "\nPress [ENTER]"
+    gets.chomp
   end
 
 
@@ -146,10 +147,15 @@ class CommandLineInterface
       begin
         @user.withdraw(balance, amount.to_f)
         puts "\nYou are withdrawing #{amount} from your #{balance.coin.name} wallet."
-      rescue
+      rescue NotEnoughFunds
         puts "\nYou do not have enough in your balance to withdraw that amount."
+      rescue StandardError
+        puts "\nYou cannot withdraw a negative amount."
       end
 
+      puts "\nThank you for using KoinBase!" unless @user
+      print "\nPress [ENTER]"
+      gets.chomp
     end
 
   def finish

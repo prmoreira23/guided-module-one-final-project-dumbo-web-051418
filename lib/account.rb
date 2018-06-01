@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
   # Withdraw a certain amount from a balance
   # Can raise a NotEnoughFunds exception or returns the new balance if successful
   def withdraw(balance, amount)
-    balance.withdraw(ammount)
+    balance.withdraw(amount)
   end
 
   def find_balance_by_coin(coin)

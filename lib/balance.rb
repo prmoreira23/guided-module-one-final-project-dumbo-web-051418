@@ -6,6 +6,7 @@ class Balance < ActiveRecord::Base
  # raises an exception otherwise
  def withdraw(amount)
    if has_enough_funds?(amount)
+     raise StandardError("Not alllowed to withdraw negative amounts. Are you nuts?") if amount < 0
      self.amount -= amount
      self.save
    else
@@ -28,7 +29,4 @@ class Balance < ActiveRecord::Base
  def has_enough_funds?(amount)
    self.amount >= amount
  end
-
-  class NotEnoughFunds < StandardError
-  end
 end
