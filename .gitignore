@@ -9,4 +9,3 @@ tmp
 *.iml
 *.log
 *.swp
-db/development.db
