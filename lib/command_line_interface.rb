@@ -37,7 +37,7 @@ class CommandLineInterface
 
 
     def print_options
-      puts @user ? "|\t\t|\t1 - See balances\n\t2 - Withdraw\n\t3 - Transfer\n\t4 - Prices\n\t0 - Logout\n |" :
+      puts @user ? "|\t\t|\t1 - See balances\t|\n\t\t|\t2 - Withdraw\t\t|\n\t\t|\t3 - Transfer\t\t|\n\t\t|\t4 - Prices\t\t|\n\t\t|\t0 - Logout\t\t|\n\t\t|_______________________________|" :
       "\t\t|\t1 - Login\t\t|\n\t\t|\t2 - Register\t\t|\n\t\t|\t3 - Prices\t\t|\n\t\t|\t4 - Help\t\t|\n\t\t|\t0 - Exit\t\t|\n\t\t|_______________________________|"
     end
 
