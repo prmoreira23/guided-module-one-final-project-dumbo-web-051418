@@ -1,5 +1,4 @@
 require 'highline/import'
-require 'digest'
 
 class CommandLineInterface
   @@options = {no_user: Hash.new(:error), user: Hash.new(:error)}
@@ -12,6 +11,7 @@ class CommandLineInterface
   @@options[:user]["0"] = :logout
   @@options[:user]["1"] = :see_balances
   @@options[:user]["2"] = :deposit_coin
+  @@options[:user]["3"] = :withdraw
 
   def initialize
     @user = nil
@@ -31,10 +31,45 @@ class CommandLineInterface
 
   def print_options
     options = "\t\t1 - login\n\t\t2 - create new account\n\t\t3 - about us\n\t\t4 - major coins quotes\n\n\t\t0 - Exit" unless @user
-    options = "\t\t1 - See Balances\n\t\t2 - Deposit Coin\n\t\t0 - Logout" if @user
+    options = "\t\t1 - See Balances\n\t\t2 - Deposit Coin\n\t\t3 - Withdraw\n\t\t0 - Logout" if @user
     puts options
   end
 
+  def coins_quotes
+    quotes = CryptoApi.get_quotes_to_dollar
+    Coin.all.each {|coin|
+        puts "Name: #{coin.name}. USD #{quotes[coin.id - 1]}"
+    }
+    print "\nPress [ENTER]"
+    gets.chomp
+  end
+
+  def about_us
+    puts "\nWe are the major crypto currency exchange in the United States. \nWe work with all major coins."
+    print "\nPress [ENTER]"
+    gets.chomp
+  end
+
+  def create_account
+      print "\nType your desired username: "
+      username = gets.chomp #future if statement to validate username
+      if Account.find_by(username: username)
+        puts "Username is already taken"
+      else
+        print "Type your desired password: "
+        password = gets.chomp
+        password = Digest::MD5.hexdigest(password)
+        print "Type your first name: "
+        first_name = gets.chomp
+        print "Type your last name: "
+        last_name = gets.chomp
+
+        Account.create(username: username, password: password, first_name: first_name, last_name: last_name)
+        puts "\n#{first_name}, your account has been registered.\n"
+        print "\nPress [ENTER]"
+        gets.chomp
+      end
+    end
 
   def run
     loop do
@@ -51,32 +86,13 @@ class CommandLineInterface
     print "username: "
     username = gets.chomp
     password = ask("password:  ") { |q| q.echo = "*" }
-    password = Digest::MD5.hexdigest(password)
     account = Account.find_by(username: username)
     @user = account.authenticate?(password) if account
 
     system("clear")
   end
 
-  def create_account
-    puts "Creating new account..."
-    gets.chomp
-  end
 
-  def about_us
-    puts "\nWe are the major crypto currency exchange in the United States. \nWe work with all major coins."
-    print "\nPress [ENTER]"
-    gets.chomp
-  end
-
-  def coins_quotes
-    quotes = CryptoApi.get_quotes_to_dollar
-    Coin.all.each {|coin|
-        puts "Name: #{coin.name}. USD #{quotes[coin.id - 1]}"
-    }
-    print "\nPress [ENTER]"
-    gets.chomp
-  end
 
   def logout
     puts "\nThank you for using KoinBase, #{@user.first_name}!" if @user
@@ -112,6 +128,29 @@ class CommandLineInterface
     balance = coin ? @user.find_balance_by_coin(coin) : nil
     @user.deposit(balance, amount.to_f) if balance
   end
+
+  def balances
+      @user.balances.map { |balance|
+        puts "\n#{balance.coin.id-1} - #{balance.coin.name} : #{balance.amount}\n\n"
+      }
+    end
+
+  def withdraw
+      balances
+      puts "Which balance would you like to withdraw from?\n"
+      input = gets.chomp
+      puts "How much would you like to withdraw?"
+      amount = gets.chomp
+      balance = @user.balances[input.to_i]
+
+      begin
+        @user.withdraw(balance, amount.to_f)
+        puts "\nYou are withdrawing #{amount} from your #{balance.coin.name} wallet."
+      rescue
+        puts "\nYou do not have enough in your balance to withdraw that amount."
+      end
+
+    end
 
   def finish
     puts "\nThank you for using KoinBase!" unless @user
