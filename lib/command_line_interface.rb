@@ -65,7 +65,7 @@ class CommandLineInterface
         first_name = gets.chomp
         puts "\nPlease enter your last name"
         last_name = gets.chomp
-        puts "\n#{username} is valid\n#{username}, your account is registered\n"
+        puts "\n#{username} is valid\n#{username}, your account is registered\n\n\n"
         Account.create(username: username, password: password, first_name: first_name, last_name: last_name)
       end
     end
@@ -122,7 +122,7 @@ class CommandLineInterface
 
       coin_hash = data["data"]
       coin_hash.each do |coin_id, coin|
-        puts "#{coin['symbol']} : #{coin['quotes']['USD']['price']}"
+        puts "\n#{coin['symbol']} : #{coin['quotes']['USD']['price']}"
       end
     end
 
