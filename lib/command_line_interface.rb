@@ -44,6 +44,8 @@ class CommandLineInterface
     def run
       welcome_message
       loop do
+        system("clear")
+        puts "\n"
         puts "\t\t*********************************\t"
         puts "\t\t|    Please enter an option:\t|\t"
         puts "\t\t*********************************\t\t"
@@ -62,6 +64,8 @@ class CommandLineInterface
       @user = user.authenticate(password) if user
       puts @user ? "\nSuccessful login as #{username}!" : "\nInvalid username or password."
       @option = @@options[:user] if @user
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def register
@@ -80,6 +84,8 @@ class CommandLineInterface
         puts "\n#{username} is valid\n#{username}, your account is registered\n\n\n"
         Account.create(username: username, password: password, first_name: first_name, last_name: last_name)
       end
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def withdraw
@@ -96,7 +102,8 @@ class CommandLineInterface
       rescue
         puts "\nYou do not have enough in your balance to withdraw that amount."
       end
-
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def transfer
@@ -118,13 +125,17 @@ class CommandLineInterface
       rescue
         puts "\nYou do not have enough in your balance to transfer that amount."
       end
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
 
     end
 
     def balances
       @user.balances.map { |balance|
-        puts "\n#{balance.coin.id-1} - #{balance.coin.name} : #{balance.amount}\n\n"
+        puts "\n\t\t#{balance.coin.id-1} - #{balance.coin.name} : #{balance.amount}\n\n"
       }
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def prices
@@ -134,19 +145,25 @@ class CommandLineInterface
 
       coin_hash = data["data"]
       coin_hash.each do |coin_id, coin|
-        puts "\n#{coin['symbol']} : #{coin['quotes']['USD']['price']}"
+        puts "\n\t\t#{coin['symbol']} : #{coin['quotes']['USD']['price']}"
       end
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def help
-      puts "\nEnter '1' to login to your account"
-      puts "Enter '2' to register a new account"
-      puts "Enter '3' to login as a guest and trade with paper money"
+      puts "\n\t\tEnter '1' to log in to your account"
+      puts "\t\tEnter '2' to register a new account"
+      puts "\t\tEnter '3' to display current prices of coins"
       # puts ""
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def error
       puts "\nInvalid entry...\nEnter '4' for help"
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def logout
@@ -154,11 +171,15 @@ class CommandLineInterface
       @option = @@options[:no_user]
       puts "\nYou have successfully logged out."
       puts ""
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def admin
       @user = Account.find_by(username: "pabloo")
       @option = @@options[:user] if @user
+      print "\n\t\tPress [ENTER] to continue"
+      gets.chomp
     end
 
     def exit_cli
